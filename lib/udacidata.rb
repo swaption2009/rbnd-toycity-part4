@@ -40,62 +40,27 @@ class Udacidata < Module
       end
 
       @arrays_of_products = Array.new
+
       data.each do |data|
         @arrays_of_products << self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
       end
       @arrays_of_products
     end
 
-    def first
-      # get CSV and convert to hash
-      data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-        data << row.to_hash
+    def first(n = 1)
+      if n > 1
+        return self.all.first(n)
+      else
+        return self.all.first
       end
-      n = 0 # get the first record in hashed data
-      # create and return object from first hashed data
-      self.new(id: data[n][:id], brand: data[n][:brand], name: data[n][:product], price: data[n][:price])
     end
 
-    # def first(n)
-    #   # get CSV and convert to hash
-    #   data = Array.new
-    #   CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-    #     data << row.to_hash
-    #   end
-    #   # create and return object from first n hashed data
-    #   @arrays_of_first_n_products = Array.new
-    #   data[0..n-1].each do |data|
-    #     @arrays_of_first_n_products << self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
-    #   end
-    #   # return array of n products
-    #   @arrays_of_first_n_products
-    # end
-
-    def last
-      # get CSV and convert to hash
-      data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-        data << row.to_hash
+    def last(n = 1)
+      if n > 1
+        return self.all.last(n)
+      else
+        return self.all.last
       end
-      n = -1 # get the last record in hashed data
-      # create and return object from first hashed data
-      self.new(id: data[n][:id], brand: data[n][:brand], name: data[n][:product], price: data[n][:price])
-    end
-
-    def last(n)
-      # get CSV and convert to hash
-      data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-        data << row.to_hash
-      end
-      # create and return object from last n hashed data
-      @arrays_of_last_n_products = Array.new
-      data[-n..-1].each do |data|
-        @arrays_of_last_n_products << self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
-      end
-      # return array of n products
-      @arrays_of_last_n_products
     end
 
     def find(n)
@@ -156,13 +121,6 @@ class Udacidata < Module
         end
       end
       return selected_products # return array of selected products
-    end
-
-    def read_csv
-      data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-        data << row.to_hash
-      end
     end
 
   end
