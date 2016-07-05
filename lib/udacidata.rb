@@ -102,6 +102,8 @@ class Udacidata < Module
         if data[:id] == 5
           data = self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
           return data # return object with id number == n
+        else
+          raise ProductNotFoundError, "Product with id number #{n} doesn't exist"
         end
       end
     end
@@ -125,6 +127,8 @@ class Udacidata < Module
         if data[:id] == n
           destroy = self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
           return destroy
+        else
+          raise ProductNotFoundError, "Product with id number #{n} doesn't exist"
         end
       end
     end
