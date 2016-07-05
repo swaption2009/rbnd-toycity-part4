@@ -34,9 +34,16 @@ class Udacidata < Module
     end
 
     def all
-      @arrays_of_products = []
-      read_csv # get all records in database
-      @arrays_of_products # return array of products
+      data = Array.new
+      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
+        data << row.to_hash
+      end
+
+      @arrays_of_products = Array.new
+      data.each do |data|
+        @arrays_of_products << self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
+      end
+      @arrays_of_products
     end
 
     def first
@@ -50,20 +57,20 @@ class Udacidata < Module
       self.new(id: data[n][:id], brand: data[n][:brand], name: data[n][:product], price: data[n][:price])
     end
 
-    def first(n)
-      # get CSV and convert to hash
-      data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-        data << row.to_hash
-      end
-      # create and return object from first n hashed data
-      @arrays_of_first_n_products = Array.new
-      data[0..n-1].each do |data|
-        @arrays_of_first_n_products << self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
-      end
-      # return array of n products
-      @arrays_of_first_n_products
-    end
+    # def first(n)
+    #   # get CSV and convert to hash
+    #   data = Array.new
+    #   CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
+    #     data << row.to_hash
+    #   end
+    #   # create and return object from first n hashed data
+    #   @arrays_of_first_n_products = Array.new
+    #   data[0..n-1].each do |data|
+    #     @arrays_of_first_n_products << self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
+    #   end
+    #   # return array of n products
+    #   @arrays_of_first_n_products
+    # end
 
     def last
       # get CSV and convert to hash
@@ -149,6 +156,13 @@ class Udacidata < Module
         end
       end
       return selected_products # return array of selected products
+    end
+
+    def read_csv
+      data = Array.new
+      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
+        data << row.to_hash
+      end
     end
 
   end
