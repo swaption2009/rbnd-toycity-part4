@@ -21,7 +21,7 @@ class Udacidata < Module
 
   class << self
 
-    DATA_PATH = File.expand_path("..", Dir.pwd) + "/data/data.csv"
+    DATA_PATH = File.dirname(__FILE__) + "/../data/data.csv"
 
     def create(args={})
       product = self.new(args)
