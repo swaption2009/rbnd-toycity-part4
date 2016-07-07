@@ -90,21 +90,18 @@ class Udacidata < Module
       end
     end
 
-    def where(options = {})
-     data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-        data << row.to_hash
-      end
-      selected_products = Array.new
-      # search hashed data and match with options parameters
+    def where(opts = {})
+      @selected_products = Array.new
+      data = self.all
+
       data.each do |data|
-        options.each do |key, value|
-         if data[:key.to_s] == value.to_s
-            selected_products << data
+        opts.each do |key, value|
+          if data.send(key) == value
+            @selected_products << data
           end
         end
       end
-      return selected_products # return array of selected products
+      return @selected_products
     end
 
   end

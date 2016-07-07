@@ -1,6 +1,7 @@
 module Analyzable
   # Your code goes here!
   def average_price(products)
+    p products
   end
 
   def print_report
