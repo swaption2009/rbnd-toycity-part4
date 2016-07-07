@@ -3,6 +3,7 @@ require_relative 'errors'
 require 'csv'
 
 class Udacidata
+
   @@data_path = File.dirname(__FILE__) + "/../data/data.csv"
 
   def update(opts = {})
@@ -77,7 +78,7 @@ class Udacidata
         # search and delete from csv file
         table = CSV.table(@@data_path)
         table.delete_if do |row|
-          row[:id] == deleted_item.id
+          row[:id] == n
         end
         File.open(@@data_path, 'w') do |f|
           f.write(table.to_csv)
