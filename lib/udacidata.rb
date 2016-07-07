@@ -2,7 +2,8 @@ require_relative 'find_by'
 require_relative 'errors'
 require 'csv'
 
-class Udacidata < Module
+class Udacidata
+  @@data_path = File.dirname(__FILE__) + "/../data/data.csv"
 
   def update(opts = {})
     @id = self.id # keep same id
@@ -12,7 +13,7 @@ class Udacidata < Module
     # destroy current csv record
     self.class.destroy(@id)
     # append new record into csv
-    CSV.open(DATA_PATH, "a+") do |csv|
+    CSV.open(@@data_path, "a+") do |csv|
       csv << [@id, @brand, @name, @price]
     end
     # return object
@@ -21,12 +22,10 @@ class Udacidata < Module
 
   class << self
 
-    DATA_PATH = File.dirname(__FILE__) + "/../data/data.csv"
-
     def create(args={})
       product = self.new(args)
       # store to database
-      CSV.open(DATA_PATH, "a+") do |csv|
+      CSV.open(@@data_path, "a+") do |csv|
         csv << [product.id, product.brand, product.name, product.price]
       end
       # return product object
@@ -35,7 +34,7 @@ class Udacidata < Module
 
     def all
       data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
+      CSV.foreach(@@data_path, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
         data << row.to_hash
       end
 
@@ -76,11 +75,11 @@ class Udacidata < Module
       deleted_item = self.find(n)
       unless deleted_item == nil
         # search and delete from csv file
-        table = CSV.table(DATA_PATH)
+        table = CSV.table(@@data_path)
         table.delete_if do |row|
           row[:id] == deleted_item.id
         end
-        File.open(DATA_PATH, 'w') do |f|
+        File.open(@@data_path, 'w') do |f|
           f.write(table.to_csv)
         end
         puts "Product id number #{deleted_item.id} has been deleted"

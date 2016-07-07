@@ -63,17 +63,17 @@ puts "RETURN LAST 2 PRODUCTS"
 puts "----------------------"
 print Product.last(2)
 
-# puts
-# puts "-------------------------"
-# puts "DESTROY PRODUCT WITH ID 2"
-# puts "-------------------------"
-# print Product.destroy(2)
+puts
+puts "-------------------------"
+puts "DESTROY PRODUCT WITH ID 2"
+puts "-------------------------"
+print Product.destroy(2)
 
-# puts
-# puts "-------------------------------"
-# puts "FIND PRODUCT 4 AND UPDATE BRAND"
-# puts "-------------------------------"
-# print Product.find(4).update(brand: "NewBrand")
+puts
+puts "-------------------------------"
+puts "FIND PRODUCT 4 AND UPDATE BRAND"
+puts "-------------------------------"
+print Product.find(4).update(brand: "NewBrand")
 
 puts
 puts "--------------"
