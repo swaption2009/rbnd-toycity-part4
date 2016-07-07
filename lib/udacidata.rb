@@ -64,44 +64,29 @@ class Udacidata < Module
     end
 
     def find(n)
-      # get CSV and convert to hash
-      data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-        data << row.to_hash
-      end
-      # match hashed data with id number
-      data.each do |data|
-        if data[:id] == 5
-          data = self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
-          return data # return object with id number == n
-        else
-          raise ProductNotFoundError, "Product with id number #{n} doesn't exist"
-        end
+      search_item = self.all.detect { |product| product.id == n }
+      unless search_item == nil
+        return search_item
+      else
+        raise ProductNotFoundError, "Product with id number #{n} doesn't exist"
       end
     end
 
     def destroy(n)
-      # get CSV and convert to hash
-      data = Array.new
-      CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
-        data << row.to_hash
-      end
-      # delete from CSV
-      table = CSV.table(DATA_PATH)
-      table.delete_if do |row|
-        row[:id] == n
-      end
-      File.open(DATA_PATH, 'w') do |f|
-        f.write(table.to_csv)
-      end
-      # return destroyed object
-      data.each do |data|
-        if data[:id] == n
-          destroy = self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
-          return destroy
-        else
-          raise ProductNotFoundError, "Product with id number #{n} doesn't exist"
+      deleted_item = self.find(n)
+      unless deleted_item == nil
+        # search and delete from csv file
+        table = CSV.table(DATA_PATH)
+        table.delete_if do |row|
+          row[:id] == deleted_item.id
         end
+        File.open(DATA_PATH, 'w') do |f|
+          f.write(table.to_csv)
+        end
+        puts "Product id number #{deleted_item.id} has been deleted"
+        return deleted_item
+      else
+        raise ProductNotFoundError, "Product with id number #{n} doesn't exist"
       end
     end
 
