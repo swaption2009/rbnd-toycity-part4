@@ -30,7 +30,7 @@ class Udacidata < Module
         csv << [product.id, product.brand, product.name, product.price]
       end
       # return product object
-      product
+      return product
     end
 
     def all
@@ -44,7 +44,7 @@ class Udacidata < Module
       data.each do |data|
         @arrays_of_products << self.new(id: data[:id], brand: data[:brand], name: data[:product], price: data[:price])
       end
-      @arrays_of_products
+      return @arrays_of_products
     end
 
     def first(n = 1)
@@ -91,8 +91,7 @@ class Udacidata < Module
     end
 
     def where(options = {})
-      # get CSV and convert to hash
-      data = Array.new
+     data = Array.new
       CSV.foreach(DATA_PATH, { encoding: "UTF-8", headers: true, header_converters: :symbol, converters: :all}) do |row|
         data << row.to_hash
       end
