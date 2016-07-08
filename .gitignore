@@ -1,0 +1,5 @@
+# Mac finder artifacts
+.DS_Store
+
+# Test data.csv file
+/data/data.csv
